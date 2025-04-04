@@ -1,0 +1,28 @@
+### Diretórios e arquivos do Maven ###
+/target/
+.mvn/
+
+### Arquivos do Maven Wrapper ###
+mvnw
+mvnw.cmd
+
+### Configurações da IDE ###
+/.idea/
+*.iml
+
+### Logs ###
+*.log
+
+### Arquivos do sistema operacional ###
+.DS_Store
+Thumbs.db
+
+### Arquivos do Spring Boot ###
+HELP.md
+
+### Variáveis de ambiente e credenciais ###
+.env
+application.properties
+application.yml
+application-dev.properties
+application-prod.properties
