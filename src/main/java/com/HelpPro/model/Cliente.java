@@ -1,5 +1,6 @@
 package com.HelpPro.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.EqualsAndHashCode;
 import lombok.Data;
@@ -9,5 +10,6 @@ import lombok.Data;
 @Entity
 public class Cliente extends Usuario {
     
+     @Column(length = 20, nullable = false)
     private String telefone;
 }
