@@ -1,5 +1,7 @@
 package com.HelpPro.model;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,6 +19,8 @@ public class Mensagem {
     private Long id;
     private String conteudo;
     private String remetente;
+     private LocalDateTime dataHora;
+     private boolean lida;
 
     @ManyToOne
     @JoinColumn(name = "cliente_id")
