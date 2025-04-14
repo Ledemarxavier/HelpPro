@@ -1,5 +1,6 @@
 package com.HelpPro.service;
 
+import com.HelpPro.exception.ResourceNotFoundException;
 import com.HelpPro.model.Profissional;
 import com.HelpPro.repository.ProfissionalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,11 @@ public class ProfissionalService {
 
     public List<Profissional> getAllProfissionais() {
         return profissionalRepository.findAll();
+    }
+
+    public Profissional getProfissionalById(Long id) {
+        return profissionalRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Profissional não encontrado"));
     }
 
     public Profissional saveProfissional(Profissional profissional) {

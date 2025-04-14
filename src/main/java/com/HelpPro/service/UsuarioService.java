@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.HelpPro.exception.ResourceNotFoundException;
 import com.HelpPro.model.Usuario;
 import com.HelpPro.repository.UsuarioRepository;
 
@@ -17,6 +18,11 @@ public class UsuarioService {
 
     public List<Usuario> getAllUsuarios() {
         return usuarioRepository.findAll();
+    }
+
+    public Usuario getUsuarioById(Long id) {
+        return usuarioRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
     }
 
     public Usuario saveUsuario(Usuario usuario) {
