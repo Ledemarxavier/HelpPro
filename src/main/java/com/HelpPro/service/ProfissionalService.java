@@ -1,12 +1,12 @@
 package com.HelpPro.service;
 
+import java.util.List;
+
 import com.HelpPro.exception.ResourceNotFoundException;
 import com.HelpPro.model.Profissional;
 import com.HelpPro.repository.ProfissionalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class ProfissionalService {
