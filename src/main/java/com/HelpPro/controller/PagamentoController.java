@@ -41,7 +41,7 @@ public class PagamentoController {
     public Pagamento updatePagamento(@PathVariable Long id, @RequestBody Pagamento pagamento) {
         pagamento.setId(id);
         return pagamentoService.savePagamento(pagamento);
-    }
+     }
 
     @DeleteMapping("/{id}")
     public void deletePagamento(@PathVariable Long id) {
