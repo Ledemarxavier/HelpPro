@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Perfil do Profissional</title>
+    <style>
+      body {
+        font-family: Arial;
+        padding: 20px;
+      }
+      .card {
+        border: 1px solid #ccc;
+        padding: 20px;
+        border-radius: 8px;
+        width: 400px;
+      }
+      button {
+        margin-top: 15px;
+        padding: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Perfil do Profissional</h1>
+    <div id="perfil" class="card">Carregando...</div>
+
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const profissionalId = urlParams.get("id");
+
+      async function carregarPerfil() {
+        const resposta = await fetch(`/profissional/${profissionalId}`);
+        if (!resposta.ok) {
+          document.getElementById("perfil").innerText =
+            "Profissional não encontrado.";
+          return;
+        }
+
+        const p = await resposta.json();
+        document.getElementById("perfil").innerHTML = `
+        <h2>${p.nome}</h2>
+        <p><strong>Email:</strong> ${p.email}</p>
+        <p><strong>Especialidade:</strong> ${p.especialidade}</p>
+        <p><strong>Descrição:</strong> ${
+          p.descricao || "Sem descrição cadastrada."
+        }</p>
+        <button onclick="marcarConsulta(${p.id})">Marcar Consulta</button>
+      `;
+      }
+
+      function marcarConsulta(id) {
+        window.location.href = `/agendamento.html?profissionalId=${id}`;
+      }
+
+      carregarPerfil();
+    </script>
+  </body>
+</html>

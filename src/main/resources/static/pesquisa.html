@@ -1,0 +1,58 @@
+--- pesquisa.html ---
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Pesquisa de Profissionais</title>
+  </head>
+  <body>
+    <h2>Pesquisa de Profissionais</h2>
+    <form id="form-pesquisa">
+      <label for="especialidade">Especialidade:</label>
+      <input type="text" id="especialidade" name="especialidade" required />
+      <button type="submit">Buscar</button>
+    </form>
+
+    <h3>Profissionais Encontrados:</h3>
+    <ul id="lista-profissionais"></ul>
+
+    <script>
+      document
+        .getElementById("form-pesquisa")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          const especialidade = document.getElementById("especialidade").value;
+          const url = `http://localhost:8080/profissional/area/${especialidade}`;
+
+          fetch(url)
+            .then((response) => response.json())
+            .then((profissionais) => {
+              const listaProfissionais = document.getElementById(
+                "lista-profissionais"
+              );
+              listaProfissionais.innerHTML = ""; // Limpa a lista antes de adicionar novos profissionais
+
+              if (profissionais.length === 0) {
+                listaProfissionais.innerHTML =
+                  "<li>Nenhum profissional encontrado.</li>";
+              } else {
+                profissionais.forEach((profissional) => {
+                  const item = document.createElement("li");
+                  item.textContent = `${profissional.nome} - ${profissional.especialidade}`;
+                  const link = document.createElement("a");
+                  link.href = `agendamento.html?profissionalId=${profissional.id}`;
+                  link.textContent = "Agendar Consulta";
+                  item.appendChild(link);
+                  listaProfissionais.appendChild(item);
+                });
+              }
+            })
+            .catch((err) => {
+              console.error("Erro ao buscar profissionais:", err);
+              alert("Erro ao buscar profissionais.");
+            });
+        });
+    </script>
+  </body>
+</html>

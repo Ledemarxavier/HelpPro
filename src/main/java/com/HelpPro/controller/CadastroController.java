@@ -43,4 +43,3 @@ public class CadastroController {
         return "redirect:/login";
     }
 }
-

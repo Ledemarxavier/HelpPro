@@ -5,6 +5,7 @@ import com.HelpPro.service.ConsultaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -38,5 +39,15 @@ public class ConsultaController {
     @DeleteMapping("/{id}")
     public void deleteConsulta(@PathVariable Long id) {
         consultaService.deleteConsulta(id);
+    }
+
+    @PutMapping("/{id}/cancelar")
+    public Consulta cancelarConsulta(@PathVariable Long id) {
+        return consultaService.cancelarConsulta(id);
+    }
+
+    @PutMapping("/{id}/remarcar")
+    public Consulta remarcarConsulta(@PathVariable Long id, @RequestBody Date novaData) {
+        return consultaService.remarcarConsulta(id, novaData);
     }
 }

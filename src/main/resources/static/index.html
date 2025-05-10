@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Pesquisar Profissionais</title>
+    <style>
+      body {
+        font-family: Arial;
+        padding: 20px;
+      }
+      input,
+      button {
+        padding: 8px;
+        margin: 5px;
+      }
+      .resultado {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Pesquisar Profissionais por Especialidade</h1>
+    <input
+      type="text"
+      id="especialidade"
+      placeholder="Digite uma especialidade"
+    />
+    <button onclick="buscarProfissionais()">Pesquisar</button>
+
+    <div class="resultado" id="resultado"></div>
+
+    <script>
+      async function buscarProfissionais() {
+        const especialidade = document.getElementById("especialidade").value;
+        const resposta = await fetch(`/profissional/area/${especialidade}`);
+        const profissionais = await resposta.json();
+
+        const resultadoDiv = document.getElementById("resultado");
+        resultadoDiv.innerHTML = "";
+
+        if (profissionais.length === 0) {
+          resultadoDiv.innerHTML = "<p>Nenhum profissional encontrado.</p>";
+          return;
+        }
+
+        profissionais.forEach((p) => {
+          const card = document.createElement("div");
+          card.innerHTML = `
+          <h3>${p.nome}</h3>
+          <p><strong>Email:</strong> ${p.email}</p>
+          <p><strong>Especialidade:</strong> ${p.especialidade}</p>
+          <button onclick="abrirPerfil(${p.id})">Ver Perfil</button>
+          <hr>
+        `;
+          resultadoDiv.appendChild(card);
+        });
+      }
+
+      function abrirPerfil(id) {
+        window.location.href = `/perfil.html?id=${id}`;
+      }
+    </script>
+  </body>
+</html>

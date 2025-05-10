@@ -12,40 +12,50 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.HelpPro.exception.ResourceNotFoundException;
 import com.HelpPro.model.Profissional;
 import com.HelpPro.service.ProfissionalService;
+import com.HelpPro.repository.ProfissionalRepository;
 
 @RestController
 @RequestMapping("/profissional")
-
 public class ProfissionalController {
-    
-@Autowired private ProfissionalService profissionalService;
 
-@GetMapping
-public List<Profissional> getAllProfissionais(){
-    return profissionalService.getAllProfissionais();
-}
+    @Autowired 
+    private ProfissionalService profissionalService;
 
-@GetMapping("/{id}")
-public Profissional getProfissionalById(@PathVariable Long id){
-    return profissionalService.getProfissionalById(id);
-}
+    @Autowired
+    private ProfissionalRepository profissionalRepository;
 
-@PostMapping
-public Profissional createProfissional(@RequestBody Profissional profissional) {   
-    return profissionalService.saveProfissional(profissional);
-}
+    @GetMapping
+    public List<Profissional> getAllProfissionais(){
+        return profissionalService.getAllProfissionais();
+    }
 
-@PutMapping("/{id}")
-public Profissional updateProfissional(@PathVariable Long id, @RequestBody Profissional profissional) {
-    profissional.setId(id);
-    return profissionalService.saveProfissional(profissional);
-}
+    @GetMapping("/area/{especialidade}")
+    public List<Profissional> buscarPorEspecialidade(@PathVariable String especialidade) {
+        return profissionalRepository.findByEspecialidadeContainingIgnoreCase(especialidade);
+    }
 
-@DeleteMapping("/{id}")
-public void deleteProfissional(@PathVariable Long id){
-     profissionalService.deleteProfissional(id);
-}
+    @GetMapping("/{id}")
+    public Profissional getProfissionalById(@PathVariable Long id){
+        return profissionalRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Profissional não encontrado"));
+    }
 
+    @PostMapping
+    public Profissional createProfissional(@RequestBody Profissional profissional) {   
+        return profissionalService.saveProfissional(profissional);
+    }
+
+    @PutMapping("/{id}")
+    public Profissional updateProfissional(@PathVariable Long id, @RequestBody Profissional profissional) {
+        profissional.setId(id);
+        return profissionalService.saveProfissional(profissional);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteProfissional(@PathVariable Long id){
+        profissionalService.deleteProfissional(id);
+    }
 }

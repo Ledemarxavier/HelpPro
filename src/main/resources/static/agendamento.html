@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Agendar Consulta</title>
+  </head>
+  <body>
+    <h2>Agendamento de Consulta</h2>
+    <h3 id="nome-profissional"></h3>
+    <!-- Aqui vai o nome do profissional -->
+    <form id="form-agendamento">
+      <input type="hidden" id="profissionalId" name="profissionalId" />
+      <label for="data">Data e Hora:</label>
+      <input type="datetime-local" id="data" name="data" required /><br /><br />
+
+      <label for="clienteId">ID do Cliente (simulado):</label>
+      <input
+        type="number"
+        id="clienteId"
+        name="clienteId"
+        required
+      /><br /><br />
+
+      <button type="submit">Confirmar Agendamento</button>
+    </form>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const profissionalId = urlParams.get("profissionalId");
+
+        // Verificação simples
+        if (!profissionalId) {
+          alert("ID do profissional não informado!");
+          window.location.href = "pesquisa.html"; // Redireciona de volta
+          return;
+        }
+
+        // Busca o profissional pelo ID para exibir seu nome
+        fetch(`http://localhost:8080/profissional/${profissionalId}`)
+          .then((response) => response.json())
+          .then((profissional) => {
+            document.getElementById("profissionalId").value = profissional.id;
+            document.getElementById(
+              "nome-profissional"
+            ).textContent = `Profissional: ${profissional.nome} - ${profissional.especialidade}`;
+          })
+          .catch((err) => {
+            console.error("Erro ao buscar o profissional:", err);
+            alert("Erro ao carregar dados do profissional.");
+          });
+
+        // Adiciona o evento de envio do formulário
+        document
+          .getElementById("form-agendamento")
+          .addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const data = document.getElementById("data").value;
+            const clienteId = document.getElementById("clienteId").value;
+
+            const consulta = {
+              data: data,
+              profissional: { id: profissionalId },
+              cliente: { id: clienteId },
+              status: "AGENDADA",
+            };
+
+            fetch("http://localhost:8080/consultas", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(consulta),
+            })
+              .then((res) => {
+                if (!res.ok) throw new Error("Erro ao agendar");
+                alert("Consulta agendada com sucesso!");
+                window.location.href = "pesquisa.html";
+              })
+              .catch((err) => {
+                console.error("Erro:", err);
+                alert("Erro: " + err.message);
+              });
+          });
+      });
+    </script>
+  </body>
+</html>
