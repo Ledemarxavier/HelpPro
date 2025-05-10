@@ -1,17 +1,25 @@
 package com.HelpPro.model;
 
+import jakarta.persistence.*;
+import lombok.Data;
+
 import java.util.List;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-
 @Data
-@EqualsAndHashCode(callSuper = true)
 @Entity
-public class Profissional extends Usuario {
+public class Profissional {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String nome;
+
+    @Column(unique = true, nullable = false)
+    private String email;
+
+    @Column(nullable = false)
+    private String senha;
 
     @Column(length = 20, nullable = false)
     private String telefone;
