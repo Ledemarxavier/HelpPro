@@ -1,50 +1,42 @@
 package com.HelpPro.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.HelpPro.model.Cliente;
 import com.HelpPro.service.ClienteService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/clientes")
+@RequestMapping("/api/clientes")
 public class ClienteController {
 
     @Autowired
     private ClienteService clienteService;
 
     @GetMapping
-    public List<Cliente> getAllClientes() {
-        return clienteService.getAllClientes();
+    public ResponseEntity<?> getAllClientes() {
+        return ResponseEntity.ok(clienteService.getAllClientes());
     }
 
     @GetMapping("/{id}")
-    public Cliente getClienteById(@PathVariable Long id) {
-        return clienteService.getClienteById(id);
+    public ResponseEntity<?> getClienteById(@PathVariable Long id) {
+        return ResponseEntity.ok(clienteService.getClienteById(id));
     }
 
     @PostMapping
-    public Cliente createCliente(@RequestBody Cliente cliente) {
-        return clienteService.saveCliente(cliente);
+    public ResponseEntity<?> createCliente(@RequestBody Cliente cliente) {
+        return ResponseEntity.ok(clienteService.saveCliente(cliente));
     }
 
     @PutMapping("/{id}")
-    public Cliente updateCliente(@PathVariable Long id, @RequestBody Cliente cliente) {
-        cliente.setId(id);
-        return clienteService.saveCliente(cliente);
+    public ResponseEntity<?> updateCliente(@PathVariable Long id, @RequestBody Cliente cliente) {
+        clienteService.atualizarCliente(id, cliente);
+        return ResponseEntity.ok(cliente);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCliente(@PathVariable Long id) {
+    public ResponseEntity<?> deleteCliente(@PathVariable Long id) {
         clienteService.deleteCliente(id);
+        return ResponseEntity.noContent().build();
     }
 }

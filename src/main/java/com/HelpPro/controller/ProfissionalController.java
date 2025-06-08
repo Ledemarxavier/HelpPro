@@ -1,51 +1,47 @@
 package com.HelpPro.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.HelpPro.model.Profissional;
 import com.HelpPro.service.ProfissionalService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/profissional")
-
+@RequestMapping("/api/profissionais")
 public class ProfissionalController {
-    
-@Autowired private ProfissionalService profissionalService;
 
-@GetMapping
-public List<Profissional> getAllProfissionais(){
-    return profissionalService.getAllProfissionais();
-}
+    @Autowired
+    private ProfissionalService profissionalService;
 
-@GetMapping("/{id}")
-public Profissional getProfissionalById(@PathVariable Long id){
-    return profissionalService.getProfissionalById(id);
-}
+    @GetMapping
+    public ResponseEntity<?> getAllProfissionais() {
+        return ResponseEntity.ok(profissionalService.getAllProfissionais());
+    }
 
-@PostMapping
-public Profissional createProfissional(@RequestBody Profissional profissional) {   
-    return profissionalService.saveProfissional(profissional);
-}
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getProfissionalById(@PathVariable Long id) {
+        return ResponseEntity.ok(profissionalService.getProfissionalById(id));
+    }
 
-@PutMapping("/{id}")
-public Profissional updateProfissional(@PathVariable Long id, @RequestBody Profissional profissional) {
-    profissional.setId(id);
-    return profissionalService.saveProfissional(profissional);
-}
+    @PostMapping
+    public ResponseEntity<?> createProfissional(@RequestBody Profissional profissional) {
+        return ResponseEntity.ok(profissionalService.saveProfissional(profissional));
+    }
 
-@DeleteMapping("/{id}")
-public void deleteProfissional(@PathVariable Long id){
-     profissionalService.deleteProfissional(id);
-}
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateProfissional(@PathVariable Long id, @RequestBody Profissional profissional) {
+        profissionalService.atualizarProfissional(id, profissional);
+        return ResponseEntity.ok(profissional);
+    }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteProfissional(@PathVariable Long id) {
+        profissionalService.deleteProfissional(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/especialidade/{especialidade}")
+    public ResponseEntity<?> getProfissionaisByEspecialidade(@PathVariable String especialidade) {
+        return ResponseEntity.ok(profissionalService.getProfissionaisByEspecialidade(especialidade));
+    }
 }
